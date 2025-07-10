@@ -1,0 +1,37 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull requests to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # Get the code from GitHub
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Set the Node.js version
+
+      - name: Install dependencies
+        run: npm install  # Install any dependencies if needed
+
+      - name: Run tests
+        run: npm test  # Run tests (you can modify this for your setup)
+
+      - name: Build app
+        run: npm run build  # Build the app (add a build script in package.json)
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub's token to deploy
+          publish_dir: ./public  # Folder where your build output goes
